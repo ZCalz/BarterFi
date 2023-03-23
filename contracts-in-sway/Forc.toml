@@ -1,0 +1,7 @@
+[project]
+authors = ["Calvin Sze"]
+entry = "main.sw"
+license = "Apache-2.0"
+name = "contracts-in-sway"
+
+[dependencies]
