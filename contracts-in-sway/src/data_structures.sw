@@ -21,7 +21,8 @@ pub struct Application {
     barrower: Indentity,
     requested_amount: u64,
     credit_score: u16
-    state: State
+    state: State,
+    loan_id: u64 | null
 }
 
 impl Loan {

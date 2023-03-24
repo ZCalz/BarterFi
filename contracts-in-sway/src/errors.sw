@@ -9,3 +9,7 @@ pub enum AccessControlError {
     OnlyAdminsCanAccess: (),
     ApplicationNotApproved: ()
 }
+
+pub enum LoanErrors {
+    CollateralRequirmentsUnmet: ()
+}
