@@ -11,27 +11,28 @@ pub struct Administrators {
 
 pub struct Loan {
     application_id: u64,
-    barrower: Indentity,
+    barrower: Identity,
     amount: u64,
     interest_rate: u64,
-    collateral: u64
+    collateral: u64,
+    state: LoanState,
 }
 
 pub struct Application {
-    barrower: Indentity,
+    barrower: Identity,
     requested_amount: u64,
-    credit_score: u16
-    state: State,
-    loan_id: u64 | null
+    credit_score: u16,
+    state: ApplicationState,
+    loan_id: Option<u64>,
 }
 
 impl Loan {
     pub fn new(
         application_id: u64,
-        barrower: Indentity,
+        barrower: Identity,
         amount: u64,
         interest_rate: u64,
-        collateral: u64
+        collateral: u64,
     ) -> Self {
         Self {
             application_id,
@@ -39,23 +40,19 @@ impl Loan {
             amount,
             interest_rate,
             collateral,
-            state: LoanState::InActive
+            state: LoanState::InActive,
         }
     }
 }
 
 impl Application {
-    pub fn new(
-        barrower: Indentity,
-        requested_amount: u64,
-        credit_score: u16
-        state: ApplicationState
-    ) -> Self {
+    pub fn new(barrower: Identity, requested_amount: u64, credit_score: u16) -> Self {
         Self {
             barrower,
             requested_amount,
             credit_score,
-            state: ApplicationState::Pending
+            state: ApplicationState::Pending,
+            loan_id: Option::None,
         }
     }
 }
@@ -63,10 +60,10 @@ impl Application {
 pub enum ApplicationState {
     Pending: (),
     Approved: (),
-    Denied: ()
+    Denied: (),
 }
 
 pub enum LoanState {
     Active: (),
-    InActive: ()
+    InActive: (),
 }
