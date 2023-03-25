@@ -42,16 +42,16 @@ impl BarterFi for Contract {
 
     #[storage(read, write)]
     fn approve_loan(application_id: u64, interest_rate: u64, collateral: u64) {
-        require(storage.admins.get(msg_sender().unwrap()) == true, AccessControlError::OnlyAdminsCanAccess);
+        require(storage.admins.get(msg_sender().unwrap()).unwrap() == true, AccessControlError::OnlyAdminsCanAccess);
         storage.approved_applications.push(application_id);
         log(ApplicationStatusEvent::ApplicationApproved);
 
-        let application: Application = storage.loan_applications.get(application_id);
-        let loan = Loan::new(application_id, application.barrower, application.amount, interest_rate, collateral);
+        let application: Application = storage.loan_applications.get(application_id).unwrap();
+        let loan = Loan::new(application_id, application.barrower, application.requested_amount, interest_rate, collateral);
 
-        let mut updateApplication = storage.loan_applications.get(application_id);
-        updateApplication.loan_id = storage.loan_id;
-        storage.loan_applications.insert(application_id, Application{ ..updateApplication});
+        let mut updateApplication: Application = storage.loan_applications.get(application_id).unwrap();
+        updateApplication.loan_id = Option::Some(storage.loan_id);
+        storage.loan_applications.insert(application_id, updateApplication); // Application{ ..updateApplication});
         storage.loans.insert(storage.loan_id, loan);
         storage.loan_id += 1;
     }
