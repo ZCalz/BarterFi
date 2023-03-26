@@ -1,14 +1,22 @@
 library interface;
+dep data_structures;
+use data_structures::{Application};
 
 abi BarterFi {
     #[storage(read, write)]
-    fn initialize();
+    fn initialize() -> Identity;
+
+    #[storage(read)]
+    fn check_admin(user: Identity) -> bool;
+
+    #[storage(read)]
+    fn check_application(application_id: u64) -> Application;
 
     #[storage(read, write)]
-    fn apply_for_loan(barrower: Identity, requested_amount: u64, credit_score: u16);
+    fn apply_for_loan(barrower: Identity, requested_amount: u64, credit_score: u16) -> u64;
 
     #[storage(read, write)]
-    fn approve_loan(application_id: u64, interest_rate: u64, collateral: u64);
+    fn approve_loan(application_id: u64, interest_rate: u8, collateral: u64);
 
 
 

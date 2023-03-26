@@ -14,6 +14,7 @@ use std::call_frames::contract_id;
 use std::{context::*, logging::log, token::*};
 use std::auth::{msg_sender};
 use std::storage::StorageVec;
+use std::{contract_id::ContractId, identity::Identity};
 
 storage {
     initialized: bool = false,
@@ -27,21 +28,36 @@ storage {
 
 impl BarterFi for Contract {
     #[storage(read, write)]
-    fn initialize() {
+    fn initialize() -> Identity {
         require(storage.initialized == false, InitError::CannotReinitialize);
         storage.initialized = true;
+        let sender = msg_sender().unwrap();
         storage.admins.insert(msg_sender().unwrap(), true);
+        (sender)
+    }
+    #[storage(read)]
+    fn check_admin(user: Identity) -> bool {
+        let isAdmin = storage.admins.get(user).unwrap();
+        isAdmin
+    }
+
+    #[storage(read)]
+    fn check_application(application_id: u64) -> Application {
+        let application = storage.loan_applications.get(application_id).unwrap();
+        application
     }
 
     #[storage(read, write)]
-    fn apply_for_loan(barrower: Identity, requested_amount: u64, credit_score: u16) {
+    fn apply_for_loan(barrower: Identity, requested_amount: u64, credit_score: u16) -> u64 {
         let application = Application::new(barrower, requested_amount, credit_score);
-        storage.loan_applications.insert(storage.application_id, application);
+        let id = storage.application_id;
+        storage.loan_applications.insert(id, application);
         storage.application_id += 1;
+        id
     }
 
     #[storage(read, write)]
-    fn approve_loan(application_id: u64, interest_rate: u64, collateral: u64) {
+    fn approve_loan(application_id: u64, interest_rate: u8, collateral: u64) {
         require(storage.admins.get(msg_sender().unwrap()).unwrap() == true, AccessControlError::OnlyAdminsCanAccess);
         storage.approved_applications.push(application_id);
         log(ApplicationStatusEvent::ApplicationApproved);

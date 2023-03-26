@@ -13,7 +13,7 @@ pub struct Loan {
     application_id: u64,
     barrower: Identity,
     amount: u64,
-    interest_rate: u64,
+    interest_rate: u8,
     collateral: u64,
     state: LoanState,
 }
@@ -31,7 +31,7 @@ impl Loan {
         application_id: u64,
         barrower: Identity,
         amount: u64,
-        interest_rate: u64,
+        interest_rate: u8,
         collateral: u64,
     ) -> Self {
         Self {
