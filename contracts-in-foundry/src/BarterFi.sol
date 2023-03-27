@@ -82,7 +82,8 @@ contract BarterFi {
             barrower: loanApplications[_applicationId].barrower,
             amount: loanApplications[_applicationId].requestedAmount,
             interestRate: _interestRate,
-            collateral: _collateral
+            collateral: _collateral,
+            state: LoanState.PENDING
         });
 
         loans[loanId] = loan;
@@ -122,5 +123,6 @@ contract BarterFi {
             msg.sender,
             loans[_loanId].amount
         );
+        return _loanId;
     }
 }
