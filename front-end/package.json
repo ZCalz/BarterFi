@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typegen:sway": "npx fuels typegen -i ../contracts-in-sway/out/debug/*-abi.json -o ./src/contracts"
   },
   "dependencies": {
     "@types/node": "18.15.9",
