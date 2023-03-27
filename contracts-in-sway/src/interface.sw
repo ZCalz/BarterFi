@@ -23,7 +23,6 @@ abi BarterFi {
     // #[storage(read, write), payable]
     // fn provide_collateral(application_id: u64);
 
-
     // #[storage(read, write)]
     // fn fund_loan() -> bool;
 
