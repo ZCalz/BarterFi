@@ -56,13 +56,22 @@ contract BarterFi {
         app.requestedAmount = _requestedAmount;
         app.creditScore = _creditScore;
 
-        uint256 _loanId = loanId;
-        app.loanId = _loanId;
+        uint256 _appId = appId;
+        appId += 1;
 
-        loanApplications[_loanId] = app;
+        loanApplications[_appId] = app;
 
-        loanId += 1;
-        return _loanId;
+        return _appId;
+    }
+
+    function getLoanApplication(
+        uint256 applicationId
+    ) public view returns (Application memory) {
+        return loanApplications[applicationId];
+    }
+
+    function getLoanDetails(uint256 _loanId) public view returns (Loan memory) {
+        return loans[_loanId];
     }
 
     function approveApplication(
@@ -74,6 +83,12 @@ contract BarterFi {
             admins[msg.sender] == true,
             "Only admins can approve applications"
         );
+        Application memory application = getLoanApplication(_applicationId);
+        require(
+            application.creditScore > 0,
+            "Requires acceptable credit score"
+        );
+
         approvedApplications[_applicationId] = true;
         emit ApprovedApplication(_applicationId);
 
@@ -86,13 +101,12 @@ contract BarterFi {
             state: LoanState.PENDING
         });
 
+        loanId += 1;
         loans[loanId] = loan;
         approvedApplications[_applicationId] = true;
         emit ApprovedApplication(_applicationId);
         loanApplications[_applicationId].state = ApplicationState.APPROVED;
         loanApplications[_applicationId].loanId = loanId;
-
-        loanId += 1;
     }
 
     function rejectApplication(uint256 _applicationId) public {
@@ -101,8 +115,8 @@ contract BarterFi {
             "Only admins can approve applications"
         );
 
-        emit DenyApplication(_applicationId);
         loanApplications[_applicationId].state = ApplicationState.DENIED;
+        emit DenyApplication(_applicationId);
     }
 
     function provideCollateral(
@@ -118,11 +132,7 @@ contract BarterFi {
             "Must provide correct collateral amount"
         );
         loans[_loanId].state = LoanState.COLLATERALIZED;
-        stableCoin.transferFrom(
-            address(this),
-            msg.sender,
-            loans[_loanId].amount
-        );
+        stableCoin.transfer(msg.sender, loans[_loanId].amount);
         return _loanId;
     }
 }
