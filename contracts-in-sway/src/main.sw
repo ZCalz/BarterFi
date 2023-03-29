@@ -35,6 +35,12 @@ impl BarterFi for Contract {
         storage.admins.insert(msg_sender().unwrap(), true);
         (sender)
     }
+
+    #[storage(read, write)]
+    fn add_admin(user: Identity) {
+        storage.admins.insert(user, true);
+    }
+
     #[storage(read)]
     fn check_admin(user: Identity) -> bool {
         let isAdmin = storage.admins.get(user).unwrap();
@@ -67,6 +73,7 @@ impl BarterFi for Contract {
 
         let mut updateApplication: Application = storage.loan_applications.get(application_id).unwrap();
         updateApplication.loan_id = Option::Some(storage.loan_id);
+        updateApplication.state = ApplicationState::Approved;
         storage.loan_applications.insert(application_id, updateApplication); // Application{ ..updateApplication});
         storage.loans.insert(storage.loan_id, loan);
         storage.loan_id += 1;

@@ -91,7 +91,7 @@ async fn can_apply_for_loan() {
 #[tokio::test]
 async fn admin_can_approve_loan() {
     let (_instance, _id, _deployer, _user) = get_contract_instance().await;
-    // let deployer = Identity::Address(Address::from(_deployer.address()));
+    let deployer = Identity::Address(Address::from(_deployer.address()));
     let applicant = Identity::Address(Address::from(_user.address()));
     let credit_score: u16 = 760;
     let requested_amount: u64 = 1_000_000;
@@ -114,11 +114,26 @@ async fn admin_can_approve_loan() {
     let application = result.value;
     assert_eq!(ApplicationState::Pending, application.state);
 
+    _instance // fix without have to call this
+    .methods()
+    .add_admin(deployer.clone())
+    .call()
+    .await
+    .unwrap();
+
+    let check_admin = _instance
+        .methods()
+        .check_admin(deployer)
+        .call()
+        .await
+        .unwrap();
+    
+    assert_eq!(true, check_admin.value);
     //approve loan
     let interest_rate: u8 = 2; //percentage
     let collateral: u64 = 400_000;
     _instance
-        .with_wallet(_deployer).expect("Fetching")
+        .with_wallet(_deployer).unwrap() //.expect("Fetching")
         .methods()
         .approve_loan(application_id, interest_rate, collateral)
         .call()
@@ -135,18 +150,36 @@ async fn admin_can_approve_loan() {
     assert_eq!(ApplicationState::Approved, application.state);
 }
 
-// #[tokio::test]
+#[tokio::test]
 // #[should_panic(expected = "OnlyAdminsCanAccess")]
-// async fn not_admin_fail_to_approve_loan() {
-//     let (_instance, _id, _deployer, user) = get_contract_instance().await;
-//     let deployer = Identity::Address(Address::from(_deployer.address()));
+async fn not_admin_fail_to_approve_loan() {
+    let (_instance, _id, _deployer, _user) = get_contract_instance().await;
+    let deployer = Identity::Address(Address::from(_deployer.address()));
+    let applicant = Identity::Address(Address::from(_user.address()));
+   
+    let credit_score: u16 = 760;
+    let requested_amount: u64 = 1_000_000;
 
-//     let result = _instance
-//         .methods()
-//         .apply_for_loan()
-//         .call()
-//         .await
-//         .unwrap();
-//     //assert deployer is admin
-//     assert_eq!(deployer, result.value);
-// }
+    let interest_rate: u8 = 2; //percentage
+    let collateral: u64 = 400_000;
+
+    let result = _instance
+    .methods()
+    .apply_for_loan(applicant,requested_amount, credit_score)
+    .call()
+    .await
+    .unwrap();
+
+    let application_id = result.value;
+
+    // let result = _instance
+    //     .with_wallet(_user).unwrap()
+    //     .methods()
+    //     .approve_loan(application_id, interest_rate, collateral)
+    //     .call()
+    //     .await
+    //     .unwrap();
+
+    //     println!("Check result:: {:#?}", result);
+
+}

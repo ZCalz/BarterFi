@@ -6,6 +6,9 @@ abi BarterFi {
     #[storage(read, write)]
     fn initialize() -> Identity;
 
+    #[storage(read, write)]
+    fn add_admin(user: Identity);
+
     #[storage(read)]
     fn check_admin(user: Identity) -> bool;
 
