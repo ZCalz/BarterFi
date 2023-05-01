@@ -2,10 +2,13 @@
   "name": "barter-fi",
   "version": "1.0.0",
   "scripts": {
+    "install-foundry": "curl -L https://foundry.paradigm.xyz | bash",
+    "build-foundry": "cargo install --git https://github.com/foundry-rs/foundry --profile local --force foundry-cli anvil chisel",
+    "prepare-foundry": "yarn install-foundry && yarn build-foundry",
     "sway-build": "cd contracts-in-sway && forc build",
     "sway-test": "cd contracts-in-sway && cargo test",
-    "forge-build": "cd contracts-in-foundry && make build",
-    "forge-test": "cd contracts-in-foundry make test",
+    "forge-build": "cd contracts-in-foundry && forge build",
+    "forge-test": "cd contracts-in-foundry && forge test",
     "contracts-build": "yarn sway-build && yarn forge-build",
     "contracts-test": "yarn sway-test && yarn forge-test"
   },

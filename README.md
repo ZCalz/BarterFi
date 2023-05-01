@@ -8,14 +8,8 @@ Created an implementation in Solidity with Foundry, and another implementation w
 
 ```
 cd contracts-in-sway
-
 forc build
 cargo test
-
-or
-
-make build
-make test
 ```
 
 ## Solidity Contracts with Foundry
