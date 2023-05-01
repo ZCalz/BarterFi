@@ -1,0 +1,16 @@
+{
+  "name": "barter-fi",
+  "version": "1.0.0",
+  "scripts": {
+    "sway-build": "cd contracts-in-sway && forc build",
+    "sway-test": "cd contracts-in-sway && cargo test",
+    "forge-build": "cd contracts-in-foundry && make build",
+    "forge-test": "cd contracts-in-foundry make test",
+    "contracts-build": "yarn sway-build && yarn forge-build",
+    "contracts-test": "yarn sway-test && yarn forge-test"
+  },
+  "main": "index.js",
+  "repository": "https://github.com/DuhCompuder/BarterFi.git",
+  "author": "duhcompuder",
+  "license": "MIT"
+}

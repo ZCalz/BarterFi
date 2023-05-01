@@ -13,12 +13,16 @@
     "@types/node": "18.15.9",
     "@types/react": "18.0.29",
     "@types/react-dom": "18.0.11",
+    "@web3-onboard/core": "^2.16.1",
+    "@web3-onboard/injected-wallets": "^2.8.3",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
+    "ethers": "^6.2.3",
     "fuels": "^0.35.0",
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "5.0.2"
+    "typescript": "5.0.2",
+    "wagmi": "^0.12.9"
   }
 }
