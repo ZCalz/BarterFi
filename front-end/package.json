@@ -13,6 +13,7 @@
     "@types/node": "18.15.9",
     "@types/react": "18.0.29",
     "@types/react-dom": "18.0.11",
+    "@wagmi/cli": "^0.1.15",
     "@web3-onboard/core": "^2.16.1",
     "@web3-onboard/injected-wallets": "^2.8.3",
     "eslint": "8.36.0",
