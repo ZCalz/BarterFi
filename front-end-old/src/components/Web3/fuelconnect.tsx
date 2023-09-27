@@ -4,7 +4,7 @@ import { Wallet } from "fuels";
 import "./App.css";
 // Import the contract factory -- you can find the name in index.ts.
 // You can also do command + space and the com cpiler will suggest the correct name.
-import { ContractsInSwayAbi__factory } from "../contracts";
+import { ContractsInSwayAbi__factory } from "../../contracts";
 
 // The address of the contract deployed the Fuel testnet
 const CONTRACT_ID =
